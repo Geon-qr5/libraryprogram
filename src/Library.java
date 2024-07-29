@@ -8,11 +8,11 @@ public class Library {
     ArrayList<Book> bookList = new ArrayList<Book>();
 
     public Library() {
-        bookList.add(new Book(1, "제목1", "작가1"));
-        bookList.add(new Book(2, "제목2", "작가2"));
-        bookList.add(new Book(3, "제목3", "작가3"));
-        bookList.add(new Book(4, "제목4", "작가4"));
-        bookList.add(new Book(5, "제목5", "작가5"));
+        bookList.add(new Book("제목1", "작가1"));
+        bookList.add(new Book("제목2", "작가2"));
+        bookList.add(new Book("제목3", "작가3"));
+        bookList.add(new Book("제목4", "작가4"));
+        bookList.add(new Book("제목5", "작가5"));
     }
 
     public void menu() {
@@ -34,16 +34,16 @@ public class Library {
 
             switch (menuNum) {
                 case 1:
-
+                    bookRent();
                     break;
                 case 2:
-
+                    bookReturn();
                     break;
                 case 3:
-
+                    bookAdd();
                     break;
                 case 4:
-
+                    bookDelete();
                     break;
                 case 9:
                     System.out.println("프로그램을 종료합니다.");
@@ -59,11 +59,31 @@ public class Library {
 
     }
 
+    private void bookRent() {
+        System.out.println("도서를 대여합니다.");
+        int bookNo = scan.getInt("책번호를 입력하세요.")-1;
+    }
+
+    private void bookReturn() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'bookReturn'");
+    }
+
+    private void bookAdd() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'bookAdd'");
+    }
+
+    private void bookDelete() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'bookDelete'");
+    }
+
     @Override
     public String toString() {
         String str = "", rent = null;
-        for(Book i : bookList){
-            int bookNo = i.getNumber();
+        int bookNo = 1;
+        for (Book i : bookList) {
             String title = i.getTitle();
             String author = i.getAuthor();
             if (!i.isRent()) {
@@ -72,10 +92,11 @@ public class Library {
                 rent = "불가능";
             }
 
-            
             str += "No." + bookNo + " / 제목 : " + title + " / 작가 : " + author + " / 대여 :" + rent + "\n";
+
+            bookNo++;
         }
         return str;
     }
-    
+
 }

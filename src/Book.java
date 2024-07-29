@@ -1,7 +1,6 @@
 
 public class Book {
 
-    private int number;
     private String title;
     private String author;
     private boolean rent;
@@ -10,15 +9,10 @@ public class Book {
 
     }
 
-    public Book(int number, String title, String author) {
-        this.number = number;
+    public Book(String title, String author) {
         this.title = title;
         this.author = author;
         rent = false;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 
     public void setTitle(String title) {
@@ -31,10 +25,6 @@ public class Book {
 
     public void setRent(boolean rent) {
         this.rent = rent;
-    }
-
-    public int getNumber() {
-        return number;
     }
 
     public String getTitle() {
