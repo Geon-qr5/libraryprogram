@@ -63,13 +63,13 @@ public class Library {
 
         while (true) {
             System.out.println("도서를 대여합니다.");
-            int bookNo = scan.getInt("종료 : 0 / 책번호를 입력하세요.") - 1;
+            int bookNo = scan.getInt("종료 : 0 / 도서 번호를 입력하세요.") - 1;
 
             if (bookNo >= bookList.size()) {
-                System.out.println("없는 번호입니다.");
+                System.out.println("없는 도서 번호입니다.");
                 continue;
             } else if (bookNo == -1) {
-                System.out.println("대여를 종료합니다.");
+                System.out.println("도서 대여를 종료합니다.");
                 return;
             }
 
@@ -77,15 +77,15 @@ public class Library {
                 bookList.get(bookNo).setRent(true);
                 System.out.printf("'%s'를 대여하였습니다.\n", bookList.get(bookNo).getTitle());
             } else if (bookList.get(bookNo).isRent() == true) {
-                System.out.println("이미 대여중인 책입니다.");
+                System.out.println("이미 대여중인 도서입니다.");
                 continue;
             }
 
-            String repeat = scan.getString("대여를 계속 진행하시겠습니까? (Y/N)");
+            String repeat = scan.getString("도서 대여를 계속 진행하시겠습니까? (Y/N)");
             if (repeat.equalsIgnoreCase("Y")) {
                 continue;
             } else if (repeat.equalsIgnoreCase("N")) {
-                System.out.println("대여를 종료합니다.");
+                System.out.println("도서 대여를 종료합니다.");
                 return;
             } else {
                 System.out.println("잘못입력하셨습니다.");
@@ -97,13 +97,13 @@ public class Library {
     private void bookReturn() {
         while (true) {
             System.out.println("도서를 반납합니다.");
-            int bookNo = scan.getInt("종료 : 0 / 책번호를 입력하세요.") - 1;
+            int bookNo = scan.getInt("종료 : 0 / 도서 번호를 입력하세요.") - 1;
 
             if (bookNo >= bookList.size()) {
                 System.out.println("없는 번호입니다.");
                 continue;
             } else if (bookNo == -1) {
-                System.out.println("반납을 종료합니다.");
+                System.out.println("도서 반납을 종료합니다.");
                 return;
             }
 
@@ -111,15 +111,15 @@ public class Library {
                 bookList.get(bookNo).setRent(false);
                 System.out.printf("'%s'를 반납하였습니다.\n", bookList.get(bookNo).getTitle());
             } else if (bookList.get(bookNo).isRent() == false) {
-                System.out.println("반납이 불가능한 책입니다.");
+                System.out.println("반납이 불가능한 도서입니다.");
                 continue;
             }
 
-            String repeat = scan.getString("반납을 계속 진행하시겠습니까? (Y/N)");
+            String repeat = scan.getString("도서 반납을 계속 진행하시겠습니까? (Y/N)");
             if (repeat.equalsIgnoreCase("Y")) {
                 continue;
             } else if (repeat.equalsIgnoreCase("N")) {
-                System.out.println("반납을 종료합니다.");
+                System.out.println("도서 반납을 종료합니다.");
                 return;
             } else {
                 System.out.println("잘못입력하셨습니다.");
@@ -129,13 +129,44 @@ public class Library {
     }
 
     private void bookAdd() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bookAdd'");
-    }
+        while (true) {
+            String repeat = scan.getString("도서를 추가하시겠습니까? (Y/N)");
+            if (repeat.equalsIgnoreCase("Y")) {
+                System.out.println("도서를 추가합니다.");
+                String title = scan.getString("도서 제목을 입력하세요.");
+                String author = scan.getString("도서 작가를 입력하세요.");
 
+                Book book = new Book(title, author);
+                bookList.add(book);
+
+            } else if (repeat.equalsIgnoreCase("N")) {
+                return;
+            } else {
+                System.out.println("잘못입력하셨습니다.");
+                continue;
+            }
+
+        }
+        
+    }
+    
     private void bookDelete() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bookDelete'");
+        while (true) {
+            String repeat = scan.getString("도서를 삭제하시겠습니까? (Y/N)");
+            if (repeat.equalsIgnoreCase("Y")) {
+                System.out.println("도서를 삭제합니다.");
+                int bookNo = scan.getInt("도서 번호를 입력하세요.") - 1 ;
+                Book book = bookList.remove(bookNo);
+                System.out.printf("%s는 삭제되었습니다.\n",book.getTitle());
+    
+            } else if (repeat.equalsIgnoreCase("N")) {
+                return;
+            } else {
+                System.out.println("잘못입력하셨습니다.");
+                continue;
+            }
+    
+        }
     }
 
     @Override
