@@ -3,7 +3,7 @@ package Common;
 import java.util.Scanner;
 
 public class ScannerUtil {
-    Scanner scan = new Scanner(System.in);
+    Scanner scan = new Scanner(System.in,"ms949");
 
     public int getInt(String str) {
         int i = 0;
