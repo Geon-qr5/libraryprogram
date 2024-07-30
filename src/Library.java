@@ -60,13 +60,72 @@ public class Library {
     }
 
     private void bookRent() {
-        System.out.println("도서를 대여합니다.");
-        int bookNo = scan.getInt("책번호를 입력하세요.")-1;
+
+        while (true) {
+            System.out.println("도서를 대여합니다.");
+            int bookNo = scan.getInt("종료 : 0 / 책번호를 입력하세요.") - 1;
+
+            if (bookNo >= bookList.size()) {
+                System.out.println("없는 번호입니다.");
+                continue;
+            } else if (bookNo == -1) {
+                System.out.println("대여를 종료합니다.");
+                return;
+            }
+
+            if (bookList.get(bookNo).isRent() == false) {
+                bookList.get(bookNo).setRent(true);
+                System.out.printf("'%s'를 대여하였습니다.\n", bookList.get(bookNo).getTitle());
+            } else if (bookList.get(bookNo).isRent() == true) {
+                System.out.println("이미 대여중인 책입니다.");
+                continue;
+            }
+
+            String repeat = scan.getString("대여를 계속 진행하시겠습니까? (Y/N)");
+            if (repeat.equalsIgnoreCase("Y")) {
+                continue;
+            } else if (repeat.equalsIgnoreCase("N")) {
+                System.out.println("대여를 종료합니다.");
+                return;
+            } else {
+                System.out.println("잘못입력하셨습니다.");
+                continue;
+            }
+        }
     }
 
     private void bookReturn() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bookReturn'");
+        while (true) {
+            System.out.println("도서를 반납합니다.");
+            int bookNo = scan.getInt("종료 : 0 / 책번호를 입력하세요.") - 1;
+
+            if (bookNo >= bookList.size()) {
+                System.out.println("없는 번호입니다.");
+                continue;
+            } else if (bookNo == -1) {
+                System.out.println("반납을 종료합니다.");
+                return;
+            }
+
+            if (bookList.get(bookNo).isRent() == true) {
+                bookList.get(bookNo).setRent(false);
+                System.out.printf("'%s'를 반납하였습니다.\n", bookList.get(bookNo).getTitle());
+            } else if (bookList.get(bookNo).isRent() == false) {
+                System.out.println("반납이 불가능한 책입니다.");
+                continue;
+            }
+
+            String repeat = scan.getString("반납을 계속 진행하시겠습니까? (Y/N)");
+            if (repeat.equalsIgnoreCase("Y")) {
+                continue;
+            } else if (repeat.equalsIgnoreCase("N")) {
+                System.out.println("반납을 종료합니다.");
+                return;
+            } else {
+                System.out.println("잘못입력하셨습니다.");
+                continue;
+            }
+        }
     }
 
     private void bookAdd() {
@@ -89,7 +148,7 @@ public class Library {
             if (!i.isRent()) {
                 rent = "가능";
             } else {
-                rent = "불가능";
+                rent = "대여중";
             }
 
             str += "No." + bookNo + " / 제목 : " + title + " / 작가 : " + author + " / 대여 :" + rent + "\n";
