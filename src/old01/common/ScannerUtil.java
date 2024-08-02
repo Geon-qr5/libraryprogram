@@ -1,4 +1,4 @@
-package Common;
+package old01.common;
 
 import java.util.Scanner;
 
