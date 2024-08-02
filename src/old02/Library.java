@@ -3,10 +3,12 @@ package old02;
 import java.util.ArrayList;
 import java.util.List;
 
+import old02.common.ConnectionUtil;
 import old02.common.ScannerUtil;
 
 public class Library {
     ScannerUtil scan = new ScannerUtil();
+    ConnectionUtil con = new ConnectionUtil();
     List<Book> book = new ArrayList<Book>();
 
     /**
@@ -137,7 +139,6 @@ public class Library {
      * 도서조회
      */
         private void bookCheck() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'bookCheck'");
+            
         }
 }
