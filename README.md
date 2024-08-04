@@ -1,18 +1,14 @@
-## Getting Started
+## 나만의 도서관만들기
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+학원에서 배운내용을 정리하며 작업하는 공간!
 
-## Folder Structure
+## version : old01
 
-The workspace contains two folders by default, where:
+Array와 List를 이용한 도서관리프로그램
+도서관리까지 구현
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## version : old02
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+SQL Database까지 접목시킨 도서관관리프로그램
+도서관리    : 구현중
+사용자관리  : 구현예정
