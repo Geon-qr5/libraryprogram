@@ -25,11 +25,11 @@ public class Library {
             System.out.println("===========================");
             System.out.println("OO도서관에 오신것을 환영합니다.");
             System.out.println("===========================");
-            System.out.println("-----------MAIN-----------");
-            System.out.println("1. 도서 관리");
-            System.out.println("2. 사용자 관리");
-            System.out.println("9. 프로그램 종료");
-            System.out.println("--------------------------");
+            System.out.println("┌────────MAIN───────────┐");
+            System.out.println("│ 1. 도서 관리          │");
+            System.out.println("│ 2. 사용자 관리        │");
+            System.out.println("│ 9. 프로그램 종료      │");
+            System.out.println("└───────────────────────┘");
             int menuNum = scan.getInt("번호를 입력하세요.");
 
             switch (menuNum) {
@@ -58,23 +58,23 @@ public class Library {
      */
     public void bookMenu() {
         while (true) {
-            System.out.println("-----------BOOK-----------");
-            System.out.println("1. 도서 대여");
-            System.out.println("2. 도서 반납");
-            System.out.println("3. 도서 등록");
-            System.out.println("4. 도서 삭제");
-            System.out.println("5. 도서 조회");
-            System.out.println("6. 출판사 조회");
-            System.out.println("7. 메인 메뉴");
-            System.out.println("9. 프로그램 종료");
-            System.out.println("--------------------------");
+            System.out.println("┌────────BOOK───────────┐");
+            System.out.println("│ 1. 도서 대여          │");
+            System.out.println("│ 2. 도서 반납          │");
+            System.out.println("│ 3. 도서 등록          │");
+            System.out.println("│ 4. 도서 삭제          │");
+            System.out.println("│ 5. 도서 조회          │");
+            System.out.println("│ 6. 출판사 조회        │");
+            System.out.println("│ 7. 메인 메뉴          │");
+            System.out.println("│ 9. 프로그램 종료      │");
+            System.out.println("└───────────────────────┘");
             int menuNum = scan.getInt("번호를 입력하세요.");
 
             switch (menuNum) {
-                case 1: // 미완성 - 도서대여
+                case 1:
                     bookRent();
                     break;
-                case 2: // 미완성 - 도서반납
+                case 2:
                     bookReturn();
                     break;
                 case 3:
@@ -126,7 +126,7 @@ public class Library {
 
             System.out.println("~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~-");
             String user = scan.getString("사용자 번호를 입력하세요.");
-            String sql = "SELECT * FROM TB_RENT WHERE MEM_NO = '" + user + "'";
+            String sql = "SELECT * FROM TB_RENT WHERE RETURN_DATE IS NULL AND MEM_NO = '" + user + "'";
 
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
@@ -159,14 +159,15 @@ public class Library {
             rs = pstmt.executeQuery();
 
             String rentNo = "'R' || LPAD ( SEQ_TB_RENT.NEXTVAL, 5, 0)";
-            sql = "INSERT INTO TB_RENT (RENT_NO, MEM_NO, BOOK_NO) VALUES ("+rentNo+",'"+user+"','"+rentBookNo+"')";
+            sql = "INSERT INTO TB_RENT (RENT_NO, MEM_NO, BOOK_NO) VALUES (" + rentNo + ",'" + user + "','" + rentBookNo
+                    + "')";
 
             pstmt = con.prepareStatement(sql);
             rs = pstmt.executeQuery();
 
-            System.out.printf("%s 도서대여가 완료되었습니다.",rentBookNo);
+            System.out.printf("%s 도서대여가 완료되었습니다.\n", rentBookNo);
 
-            sql = "SELECT * FROM TB_RENT WHERE MEM_NO = '" + user + "'";
+            sql = "SELECT * FROM TB_RENT WHERE RETURN_DATE IS NULL AND MEM_NO = '" + user + "'";
 
             pstmt = con.prepareStatement(sql);
             rs = pstmt.executeQuery();
@@ -201,16 +202,78 @@ public class Library {
     }
 
     /**
-     * 도서반납 - 구현중
+     * 도서반납
      */
     private void bookReturn() {
-        String sql = "";
-
         try {
             Connection con = ConnectionUtil.getConnection();
             Statement st = con.createStatement();
+
+            System.out.println("~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~-");
+            String user = scan.getString("사용자 번호를 입력하세요.");
+            String sql = "SELECT * FROM TB_RENT WHERE RETURN_DATE IS NULL AND MEM_NO = '" + user + "'";
+
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
+
+            System.out.printf("현재 %s 사용자가 대여중인 책 목록입니다.\n", user);
+            while (rs.next()) {
+                String rent_no = rs.getString("RENT_NO");
+                String mem_no = rs.getString("MEM_NO");
+                String book_no = rs.getString("BOOK_NO");
+                RentBook book = new RentBook(rent_no, mem_no, book_no);
+
+                rentBookList.add(book);
+            }
+
+            for (RentBook rent : rentBookList) {
+                System.out.println(rent.toString());
+            }
+
+            System.out.println("~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~-");
+
+            rentBookList.clear();
+
+            System.out.println("~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~-");
+
+            String returnBookNo = scan.getString("반납을 원하는 도서번호를 입력하세요.");
+
+            sql = "UPDATE TB_BOOK SET RENTYN = 'N' WHERE BOOK_NO = '" + returnBookNo + "'";
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            
+            sql = "UPDATE TB_RENT SET RETURN_DATE = SYSDATE WHERE RETURN_DATE IS NULL AND BOOK_NO = '" + returnBookNo + "'";
+
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            System.out.printf("%s 도서반납이 완료되었습니다.\n", returnBookNo);
+
+            sql = "SELECT * FROM TB_RENT WHERE RETURN_DATE IS NULL AND MEM_NO = '" + user + "'";
+
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            System.out.printf("현재 %s 사용자가 대여중인 책 목록입니다.\n", user);
+            while (rs.next()) {
+                String rent_no = rs.getString("RENT_NO");
+                String mem_no = rs.getString("MEM_NO");
+                String book_no = rs.getString("BOOK_NO");
+                RentBook book = new RentBook(rent_no, mem_no, book_no);
+
+                rentBookList.add(book);
+            }
+
+            for (RentBook rent : rentBookList) {
+                System.out.println(rent.toString());
+            }
+
+            System.out.println("~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~-");
+
+            rentBookList.clear();
+
+            bookCheck();
+            System.out.println("~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~- ~-");
 
             ConnectionUtil.closeConnection(rs, pstmt, con, st);
         } catch (SQLException e) {
