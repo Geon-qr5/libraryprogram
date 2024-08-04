@@ -4,11 +4,11 @@
 
 ## version : old01
 
-Array와 List를 이용한 도서관리프로그램
+Array와 List를 이용한 도서관리프로그램      \n
 도서관리까지 구현
 
 ## version : old02
 
-SQL Database까지 접목시킨 도서관관리프로그램
-도서관리    : 구현중
-사용자관리  : 구현예정
+SQL Database까지 접목시킨 도서관관리프로그램 \n
+도서관리    : 구현중                        \n
+사용자관리  : 구현예정                      \n
