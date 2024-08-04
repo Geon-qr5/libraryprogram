@@ -1,16 +1,21 @@
 package old02;
 
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
+// import java.util.List;
 
 import old02.common.ConnectionUtil;
 import old02.common.ScannerUtil;
 
 public class Library {
     ScannerUtil scan = new ScannerUtil();
-    ConnectionUtil con = new ConnectionUtil();
-    List<Book> book = new ArrayList<Book>();
-
+    ArrayList<Book> bookList = new ArrayList<Book>();
+    ArrayList<Pub> pubList = new ArrayList<Pub>();
+    
+    public Library() {
+        
+    }
+    
     /**
      * 메인 메뉴
      */
@@ -25,35 +30,33 @@ public class Library {
             System.out.println("9. 프로그램 종료");
             System.out.println("--------------------------");
             int menuNum = scan.getInt("번호를 입력하세요.");
-
+            
             switch (menuNum) {
                 case 1:
-                    bookMenu();
-                    break;
+                bookMenu();
+                break;
                 case 2: // 미완성 - 멤버메뉴 구성
-                    memberMenu();
-                    break;
+                memberMenu();
+                break;
                 case 9:
-                    System.out.println("프로그램을 종료합니다.");
-                    System.out.println("이용해주셔서 감사합니다.");
-                    System.exit(-1);
-                    break;
+                System.out.println("프로그램을 종료합니다.");
+                System.out.println("이용해주셔서 감사합니다.");
+                System.exit(-1);
+                break;
                 default:
-                    System.out.println("잘못입력하였습니다.");
-                    break;
+                System.out.println("잘못입력하였습니다.");
+                break;
             }
-
+            
         }
-
+        
     }
-
+    
     /**
      * 도서 관리 메뉴
      */
     public void bookMenu() {
         while (true) {
-            System.out.println("----------도서목록----------");
-            System.out.println(toString());
             System.out.println("-----------BOOK-----------");
             System.out.println("1. 도서 대여");
             System.out.println("2. 도서 반납");
@@ -64,36 +67,36 @@ public class Library {
             System.out.println("9. 프로그램 종료");
             System.out.println("--------------------------");
             int menuNum = scan.getInt("번호를 입력하세요.");
-
+            
             switch (menuNum) {
                 case 1: // 미완성 - 도서대여
-                    bookRent();
-                    break;
+                bookRent();
+                break;
                 case 2: // 미완성 - 도서반납
-                    bookReturn();
-                    break;
-                case 3: // 미완성 - 도서추가
-                    bookAdd();
-                    break;
+                bookReturn();
+                break;
+                case 3:
+                bookAdd();
+                break;
                 case 4: // 미완성 - 도서삭제
-                    bookDelete();
-                    break;
-                case 5: // 미완성 - 도서조회
-                    bookCheck();
-                    break;
+                bookDelete();
+                break;
+                case 5:
+                bookCheck();
+                break;
                 case 6:
-                    mainMenu();
-                    break;
+                mainMenu();
+                break;
                 case 9:
-                    System.out.println("프로그램을 종료합니다.");
-                    System.out.println("이용해주셔서 감사합니다.");
-                    System.exit(-1);
-                    break;
+                System.out.println("프로그램을 종료합니다.");
+                System.out.println("이용해주셔서 감사합니다.");
+                System.exit(-1);
+                break;
                 default:
-                    System.out.println("잘못입력하였습니다.");
-                    break;
+                System.out.println("잘못입력하였습니다.");
+                break;
             }
-
+            
         }
     }
     
@@ -105,40 +108,168 @@ public class Library {
     }
     
     /**
-     * 도서대여
+     * 도서대여 - 구현중
      */
     private void bookRent() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bookRent'");
+        String sql = "";
+        try {
+            Connection con = ConnectionUtil.getConnection();
+            Statement st = con.createStatement();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            
+            ConnectionUtil.closeConnection(rs, pstmt, con, st);
+        } catch (SQLException e) {
+            System.out.println("도서 대여 중 오류발생");
+            e.printStackTrace();
+        }
+        
     }
     
     /**
-     * 도서반납
+     * 도서반납 - 구현중
      */
     private void bookReturn() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bookReturn'");
+        String sql = "";
+        
+        try {
+            Connection con = ConnectionUtil.getConnection();
+            Statement st = con.createStatement();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            
+            ConnectionUtil.closeConnection(rs, pstmt, con, st);
+        } catch (SQLException e) {
+            System.out.println("도서 반납 중 오류발생");
+            e.printStackTrace();
+        }
+        
     }
     
     /**
      * 도서추가
      */
     private void bookAdd() {
-
+        String book_no = "'B' || LPAD ( SEQ_TB_BOOK.NEXTVAL, 5, 0)";
+        String title = scan.getString("도서 타이틀");
+        String author = scan.getString("도서 작가명");
+        String price = scan.getString("도서 가격");
+        pubCheck();
+        String pubNo = scan.getString("출판사번호");
+        String quarry = "BOOK_NO, TITLE, AUTHOR, PRICE, PUB_NO";
+        String blues = book_no + ",'" + title + "','" + author + "'," + price + ",'" + pubNo + "'";
+        String sql = "INSERT INTO TB_BOOK (" + quarry + ") VALUES (" + blues + ")";
+        
+        try {
+            Connection con = ConnectionUtil.getConnection();
+            Statement st = con.createStatement();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            
+            ConnectionUtil.closeConnection(rs, pstmt, con, st);
+        } catch (SQLException e) {
+            System.out.println("도서 추가 중 오류발생");
+            e.printStackTrace();
+        }
+        
+        System.out.printf("%s도서가 추가 되었습니다.\n", title);
     }
     
     /**
-     * 도서삭제
+     * 도서삭제 - 구현중
      */
     private void bookDelete() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bookDelete'");
+        String sql = "";
+        
+        try {
+            Connection con = ConnectionUtil.getConnection();
+            Statement st = con.createStatement();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            
+            ConnectionUtil.closeConnection(rs, pstmt, con, st);
+        } catch (SQLException e) {
+            System.out.println("도서추가 중 오류발생");
+            e.printStackTrace();
+        }
+        
     }
-    
+
     /**
      * 도서조회
      */
-        private void bookCheck() {
+    private void bookCheck() {
+        String sql = "SELECT * FROM TB_BOOK";
+        
+        try {
+            Connection con = ConnectionUtil.getConnection();
+            Statement st = con.createStatement();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();           
             
+            String book_no = null;
+            String title = null;
+            String author = null;
+            String rentyn = null;
+            Book book = new Book(book_no, title, author, rentyn);
+
+            while (rs.next()) {
+                book_no = rs.getString("BOOK_NO");
+                title = rs.getString("TITLE");
+                author = rs.getString("AUTHOR");
+                rentyn = rs.getString("RENTYN");
+                book = new Book(book_no, title, author, rentyn);
+                
+                bookList.add(book);
+            }
+
+            for (Book bookFor : bookList) {
+                System.out.println(bookFor.toString());
+            }
+            
+            bookList.clear();
+
+            ConnectionUtil.closeConnection(rs, pstmt, con, st);
+        } catch (SQLException e) {
+            System.out.println("도서 조회 중 오류발생");
+            e.printStackTrace();
         }
+
+    }
+
+    /**
+     * 출판사조회
+     */
+    private void pubCheck() {
+        String sql = "SELECT * FROM TB_PUB";
+
+        try {
+            Connection con = ConnectionUtil.getConnection();
+            Statement st = con.createStatement();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String pub_no = rs.getString("PUB_NO");
+                String pubName = rs.getString("PUB_NAME");
+                String phone = rs.getString("PHONE");
+                
+                Pub pub = new Pub(pub_no, pubName, phone);
+                pubList.add(pub);
+            }
+            
+            for (Pub pub : pubList) {
+                System.out.println(pub.toString());
+            }
+            
+            pubList.clear();
+
+            ConnectionUtil.closeConnection(rs, pstmt, con, st);
+        } catch (SQLException e) {
+            System.out.println("출판사 조회 중 오류발생");
+            e.printStackTrace();
+        }
+
+    }
+
 }
