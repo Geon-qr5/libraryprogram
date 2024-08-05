@@ -21,6 +21,7 @@ public class BookDTO {
         this.author = author;
         this.price = price;
         this.pub_no = pub_no;
+        this.rentyn = "N";
     }
     
     @Override

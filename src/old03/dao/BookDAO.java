@@ -30,9 +30,10 @@ public class BookDAO {
                 String book_no = rs.getString("book_no");
                 String title = rs.getString("title");
                 String author = rs.getString("author");
-                String rentyn = rs.getString("rentyn");
+                int price = rs.getInt("price");
+                String pub_no = rs.getString("pub_no");
 
-                BookDTO bookDTO = new BookDTO(book_no, title, author, rentyn);
+                BookDTO bookDTO = new BookDTO(book_no, title, author, price, pub_no);
                 list.add(bookDTO);
             }
         } catch (SQLException e) {
@@ -54,11 +55,14 @@ public class BookDAO {
         try (
             Connection con = ConnectionUtil.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
         ){
             pstmt.setString(1, book.getTitle());
             pstmt.setString(2, book.getAuthor());
-            pstmt.setInt(2, book.getPrice());
-            pstmt.setString(2, book.getPub_no());
+            pstmt.setInt(3, book.getPrice());
+            pstmt.setString(4, book.getPub_no());
+            
+            System.out.println(sql);
 
         } catch (SQLException e) {
             System.out.println("SQL 오류");
